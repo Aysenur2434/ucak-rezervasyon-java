@@ -4,15 +4,6 @@ Bu proje, Java dilinde nesne yönelimli programlama prensiplerine uygun olarak g
 
 ---
 
-## 🎯 Proje Amacı
-
-- OOP kavramlarını pekiştirmek  
-- Gerçek dünya problemlerini yazılımla modellemek  
-- JSON formatında dosya işlemleri gerçekleştirmek  
-- Java'da sınıf yapıları, kullanıcı girdileri ve veri kaydı pratiği kazanmak
-
----
-
 ## 🔧 Kullanılan Yapılar
 
 - `Class`, `Encapsulation`, `Association`

@@ -1,53 +1,66 @@
-# ✈️ Uçak Bilet Rezervasyon Konsol Uygulaması (Java OOP)
+# ✈️ Java Uçak Bilet Rezervasyon Uygulaması
 
-## 📌 Proje Açıklaması
+Bu proje, Java dilinde nesne yönelimli programlama prensiplerine uygun olarak geliştirilmiş basit bir uçak bileti rezervasyon uygulamasıdır. Konsol üzerinden çalışan bu sistem, kullanıcıya aktif uçuşları listeler ve koltuk uygunluğu olan uçuşlara rezervasyon yapılmasına izin verir.
 
-Bu proje, Java programlama dili kullanılarak geliştirilen basit bir uçak bilet rezervasyon sistemidir. Kullanıcılar konsol arayüzü üzerinden mevcut uçuşları görüntüleyebilir ve bir uçuş için rezervasyon yapabilir. Yapılan rezervasyonlar JSON dosyasına kaydedilmektedir.
+---
+
+## 🎯 Proje Amacı
+
+- OOP kavramlarını pekiştirmek  
+- Gerçek dünya problemlerini yazılımla modellemek  
+- JSON formatında dosya işlemleri gerçekleştirmek  
+- Java'da sınıf yapıları, kullanıcı girdileri ve veri kaydı pratiği kazanmak
 
 ---
 
 ## 🔧 Kullanılan Yapılar
 
-- Java OOP (Sınıflar, Nesneler, Encapsulation)
-- Interface ve Abstract kullanımına açık yapı
-- Konsol tabanlı kullanıcı arayüzü
-- JSON formatında veri kaydı (Google Gson kütüphanesi)
+- `Class`, `Encapsulation`, `Association`
+- `List`, `Scanner`, `LocalDateTime`
+- `Gson` ile JSON dosyaya veri yazma
+- Konsol tabanlı etkileşim
 
 ---
 
-## 🧱 Sınıflar
+## 📦 Sınıflar Hakkında Kısa Bilgi
 
-| Sınıf Adı       | Açıklama |
-|----------------|----------|
-| `Ucak`         | Uçak bilgilerini içerir (model, marka, seri no, koltuk kapasitesi). |
-| `Lokasyon`     | Lokasyon bilgilerini tutar (ülke, şehir, havaalanı, aktif/pasif). |
-| `Ucus`         | Bir uçuşu tanımlar. Kalkış, varış, saat ve uçak içerir. |
-| `Rezervasyon`  | Bir yolcu rezervasyonu (ad, soyad, yaş, uçuş). |
-| `DosyaServisi` | Rezervasyonları JSON dosyasına yazar. |
-| `MainApp`      | Konsol uygulaması burada çalışır, kullanıcı etkileşimi buradan yönetilir. |
-
----
-
-## ▶️ Uygulama Kullanımı
-
-1. Konsolda mevcut uçuşlar listelenir.
-2. Kullanıcı uçuş seçer.
-3. Ad, soyad, yaş bilgileri girilir.
-4. Uçuşta boş koltuk varsa rezervasyon yapılır.
-5. Programdan çıkıldığında tüm rezervasyonlar `rezervasyonlar.json` dosyasına kaydedilir.
+| Sınıf Adı         | Açıklama |
+|-------------------|----------|
+| `Ucak`            | Model, marka, seri no, koltuk kapasitesi bilgilerini tutar. |
+| `Lokasyon`        | Ülke, şehir, havaalanı ve aktiflik durumu içerir. |
+| `Ucus`            | Kalkış, varış, saat ve uçak bilgilerini birleştirir. |
+| `Rezervasyon`     | Yolcunun adı, soyadı, yaşı ve seçtiği uçuş bilgilerini barındırır. |
+| `DosyaServisi`    | Rezervasyon listesini JSON formatında dosyaya yazar. |
+| `MainApp`         | Konsol arayüzüdür, tüm işlemler burada yürütülür. |
 
 ---
 
-## 📂 JSON Dosya Yapısı
+## ▶️ Kullanım
 
-Rezervasyonlar şu şekilde bir JSON formatında saklanır:
+1. Uygulama başlatıldığında mevcut uçuşlar listelenir.
+2. Kullanıcı bir uçuş seçer.
+3. Ad, soyad ve yaş bilgileri girilir.
+4. Rezervasyon uygunluk kontrolü yapılır.
+5. Başarılı rezervasyonlar `rezervasyonlar.json` dosyasına kaydedilir.
+
+---
+
+## 💡 Notlar
+
+- Rezervasyon sayısı, uçak koltuk kapasitesinden fazla olamaz.
+- Lokasyonlar aktif değilse uçuşta kullanılamaz.
+- Program sonunda tüm rezervasyonlar otomatik olarak dosyaya kaydedilir.
+
+---
+
+## 📁 Örnek JSON Kaydı
 
 ```json
 [
   {
-    "ad": "Ayşe",
-    "soyad": "Yılmaz",
-    "yas": 25,
+    "ad": "Ayşenur",
+    "soyad": "Yıldız",
+    "yas": 23,
     "ucus": {
       ...
     }

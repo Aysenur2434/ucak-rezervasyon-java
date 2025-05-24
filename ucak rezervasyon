@@ -1,0 +1,182 @@
+// Ucak.java
+public class Ucak {
+    private String model;
+    private String marka;
+    private String seriNo;
+    private int koltukKapasitesi;
+
+    public Ucak(String model, String marka, String seriNo, int koltukKapasitesi) {
+        this.model = model;
+        this.marka = marka;
+        this.seriNo = seriNo;
+        this.koltukKapasitesi = koltukKapasitesi;
+    }
+
+    public String getModel() { return model; }
+    public String getMarka() { return marka; }
+    public String getSeriNo() { return seriNo; }
+    public int getKoltukKapasitesi() { return koltukKapasitesi; }
+
+    @Override
+    public String toString() {
+        return marka + " " + model + " (" + seriNo + ") - Kapasite: " + koltukKapasitesi;
+    }
+}
+
+// Lokasyon.java
+public class Lokasyon {
+    private String ulke;
+    private String sehir;
+    private String havaalani;
+    private boolean aktif;
+
+    public Lokasyon(String ulke, String sehir, String havaalani, boolean aktif) {
+        this.ulke = ulke;
+        this.sehir = sehir;
+        this.havaalani = havaalani;
+        this.aktif = aktif;
+    }
+
+    public String getUlke() { return ulke; }
+    public String getSehir() { return sehir; }
+    public String getHavaalani() { return havaalani; }
+    public boolean isAktif() { return aktif; }
+
+    @Override
+    public String toString() {
+        return havaalani + " - " + sehir + ", " + ulke + (aktif ? " (Aktif)" : " (Pasif)");
+    }
+}
+
+// Ucus.java
+import java.time.LocalDateTime;
+
+public class Ucus {
+    private Lokasyon kalkis;
+    private Lokasyon varis;
+    private LocalDateTime saat;
+    private Ucak ucak;
+    private int rezervasyonSayisi = 0;
+
+    public Ucus(Lokasyon kalkis, Lokasyon varis, LocalDateTime saat, Ucak ucak) {
+        this.kalkis = kalkis;
+        this.varis = varis;
+        this.saat = saat;
+        this.ucak = ucak;
+    }
+
+    public boolean rezervasyonYapilabilir() {
+        return rezervasyonSayisi < ucak.getKoltukKapasitesi();
+    }
+
+    public void rezervasyonEkle() {
+        rezervasyonSayisi++;
+    }
+
+    public Lokasyon getKalkis() { return kalkis; }
+    public Lokasyon getVaris() { return varis; }
+    public LocalDateTime getSaat() { return saat; }
+    public Ucak getUcak() { return ucak; }
+
+    @Override
+    public String toString() {
+        return kalkis + " -> " + varis + " | Saat: " + saat + " | " + ucak;
+    }
+}
+
+// Rezervasyon.java
+public class Rezervasyon {
+    private String ad;
+    private String soyad;
+    private int yas;
+    private Ucus ucus;
+
+    public Rezervasyon(String ad, String soyad, int yas, Ucus ucus) {
+        this.ad = ad;
+        this.soyad = soyad;
+        this.yas = yas;
+        this.ucus = ucus;
+    }
+
+    @Override
+    public String toString() {
+        return "Yolcu: " + ad + " " + soyad + " (" + yas + ")\n" +
+                "Uçuş: " + ucus;
+    }
+}
+
+// DosyaServisi.java
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+public class DosyaServisi {
+    public static void rezervasyonlariKaydet(List<Rezervasyon> rezervasyonlar, String dosyaAdi) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter(dosyaAdi)) {
+            gson.toJson(rezervasyonlar, writer);
+            System.out.println("Rezervasyonlar başarıyla kaydedildi: " + dosyaAdi);
+        } catch (IOException e) {
+            System.out.println("Dosya yazma hatası: " + e.getMessage());
+        }
+    }
+}
+
+// MainApp.java
+import java.time.LocalDateTime;
+import java.util.*;
+
+public class MainApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Örnek veriler
+        Ucak ucak1 = new Ucak("737", "Boeing", "SN1001", 2);
+        Lokasyon istanbul = new Lokasyon("Türkiye", "İstanbul", "IST", true);
+        Lokasyon ankara = new Lokasyon("Türkiye", "Ankara", "ESB", true);
+        Ucus ucus1 = new Ucus(istanbul, ankara, LocalDateTime.now().plusHours(3), ucak1);
+
+        List<Ucus> ucuslar = new ArrayList<>();
+        ucuslar.add(ucus1);
+
+        List<Rezervasyon> rezervasyonlar = new ArrayList<>();
+
+        while (true) {
+            System.out.println("--- Mevcut Uçuşlar ---");
+            for (int i = 0; i < ucuslar.size(); i++) {
+                System.out.println((i + 1) + ". " + ucuslar.get(i));
+            }
+            System.out.print("Rezervasyon yapmak istediğiniz uçuş numarasını girin (0: Çıkış): ");
+            int secim = scanner.nextInt();
+            scanner.nextLine();
+
+            if (secim == 0) break;
+            if (secim < 1 || secim > ucuslar.size()) continue;
+
+            Ucus seciliUcus = ucuslar.get(secim - 1);
+            if (!seciliUcus.rezervasyonYapilabilir()) {
+                System.out.println("Bu uçuşta boş koltuk yok!");
+                continue;
+            }
+
+            System.out.print("Adınız: ");
+            String ad = scanner.nextLine();
+            System.out.print("Soyadınız: ");
+            String soyad = scanner.nextLine();
+            System.out.print("Yaşınız: ");
+            int yas = scanner.nextInt();
+            scanner.nextLine();
+
+            Rezervasyon yeniRez = new Rezervasyon(ad, soyad, yas, seciliUcus);
+            rezervasyonlar.add(yeniRez);
+            seciliUcus.rezervasyonEkle();
+            System.out.println("Rezervasyon başarılı!\n");
+        }
+
+        // Dosyaya kaydet
+        DosyaServisi.rezervasyonlariKaydet(rezervasyonlar, "rezervasyonlar.json");
+        scanner.close();
+    }
+}
